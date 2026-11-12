@@ -72,27 +72,34 @@ const PG = (() => {
   }
 
   // 版面計算（單位 mm）
-  function layout({ sizeMm, marginMm, rtl }) {
+  // portrait：true = A4 直放（寬高對調）
+  function layout({ sizeMm, marginMm, rtl, portrait }) {
+    const pageW = portrait ? C.PAGE_H_MM : C.PAGE_W_MM;
+    const pageH = portrait ? C.PAGE_W_MM : C.PAGE_H_MM;
     const cellH = sizeMm;
     const cellW = sizeMm * (1 + C.BPMF_RATIO);
     const gap = C.COLUMN_GAP_MM;
-    const availW = C.PAGE_W_MM - 2 * marginMm;
-    const availH = C.PAGE_H_MM - 2 * marginMm;
+    const availW = pageW - 2 * marginMm;
+    const availH = pageH - 2 * marginMm;
     const cols = Math.max(0, Math.floor((availW + gap) / (cellW + gap) + 1e-6));
     const rows = Math.max(0, Math.floor(availH / cellH + 1e-6));
     const gridW = cols * cellW + Math.max(0, cols - 1) * gap;
     const gridH = rows * cellH;
-    const ox = (C.PAGE_W_MM - gridW) / 2;
-    const oy = (C.PAGE_H_MM - gridH) / 2;
+    const ox = (pageW - gridW) / 2;
+    const oy = (pageH - gridH) / 2;
     const colX = c => ox + (rtl ? cols - 1 - c : c) * (cellW + gap);
     const rowY = r => oy + r * cellH;
-    return { sizeMm, cellW, cellH, cols, rows, colX, rowY };
+    return { sizeMm, cellW, cellH, cols, rows, colX, rowY, pageW, pageH };
   }
 
   // 一頁空白稿紙（含格線）
   function makePage(L, gridOn) {
     const page = document.createElement('div');
     page.className = 'page';
+    if (L && L.pageW) {
+      page.style.width = L.pageW + 'mm';
+      page.style.height = L.pageH + 'mm';
+    }
     if (gridOn) drawGrid(page, L);
     return page;
   }
@@ -101,7 +108,7 @@ const PG = (() => {
   function drawGrid(page, L) {
     const svg = document.createElementNS(SVGNS, 'svg');
     svg.setAttribute('class', 'grid');
-    svg.setAttribute('viewBox', `0 0 ${C.PAGE_W_MM} ${C.PAGE_H_MM}`);
+    svg.setAttribute('viewBox', `0 0 ${L.pageW ?? C.PAGE_W_MM} ${L.pageH ?? C.PAGE_H_MM}`);
     const line = (x1, y1, x2, y2, color, w) => {
       const l = document.createElementNS(SVGNS, 'line');
       Object.entries({ x1, y1, x2, y2, stroke: color, 'stroke-width': w, 'stroke-linecap': 'square' })

@@ -22,10 +22,11 @@ window.PAPERGRID_CONFIG = {
   BPMF_RATIO: 0.5,
 
   // ── 版面預設值 ──
-  PAGE_W_MM: 297,          // A4 橫放
+  PAGE_W_MM: 297,          // A4 橫放時的寬、高（直放時自動對調）
   PAGE_H_MM: 210,
+  DEFAULT_ORIENTATION: 'portrait',  // 紙張方向：'landscape' 橫式、'portrait' 直式
   DEFAULT_SIZE_CM: 2.5,    // 國字大小
-  DEFAULT_MARGIN_CM: 1.5,  // 紙張四周最小邊界（格子會在頁面置中）
+  DEFAULT_MARGIN_CM: 0.5,  // 紙張四周最小邊界（格子會在頁面置中）
   COLUMN_GAP_MM: 0,        // 直行之間的間隔（0 = 格子緊鄰，像稿紙）
 
   // ── 格線樣式 ──

@@ -9,6 +9,13 @@
   textEl.value = C.DEFAULT_TEXT;
   sizeEl.value = C.DEFAULT_SIZE_CM;
   marginEl.value = C.DEFAULT_MARGIN_CM;
+  (document.querySelector(`input[name=orient][value="${C.DEFAULT_ORIENTATION}"]`)
+    || document.querySelector('input[name=orient]')).checked = true;
+
+  // 列印的紙張方向跟著選項走（覆蓋 style.css 的 @page）
+  const pageStyleEl = document.createElement('style');
+  document.head.appendChild(pageStyleEl);
+  let pageWMm = C.PAGE_W_MM;
 
   let lines = [];
 
@@ -20,11 +27,15 @@
   function render() {
     lines = PG.parse(textEl.value);
     const rtl = document.querySelector('input[name=dir]:checked').value === 'rtl';
+    const portrait = document.querySelector('input[name=orient]:checked').value === 'portrait';
     const L = PG.layout({
       sizeMm: Math.max(5, num(sizeEl, C.DEFAULT_SIZE_CM) * 10),
       marginMm: num(marginEl, C.DEFAULT_MARGIN_CM) * 10,
       rtl,
+      portrait,
     });
+    pageWMm = L.pageW;
+    pageStyleEl.textContent = `@page { size: A4 ${portrait ? 'portrait' : 'landscape'}; margin: 0; }`;
 
     pagesEl.textContent = '';
     if (L.cols < 1 || L.rows < 1) {
@@ -70,7 +81,7 @@
 
   // 預覽縮放到符合視窗寬度（列印時不縮放）
   function fitZoom() {
-    const pagePx = C.PAGE_W_MM * 96 / 25.4;
+    const pagePx = pageWMm * 96 / 25.4;
     const avail = previewEl.clientWidth - 40;
     pagesEl.style.zoom = Math.min(1, avail / pagePx);
   }
@@ -91,7 +102,7 @@
   sizeEl.addEventListener('input', render);
   marginEl.addEventListener('input', render);
   gridEl.addEventListener('change', render);
-  document.querySelectorAll('input[name=dir]').forEach(el => el.addEventListener('change', render));
+  document.querySelectorAll('input[name=dir], input[name=orient]').forEach(el => el.addEventListener('change', render));
   document.querySelectorAll('button[data-size]').forEach(b => b.addEventListener('click', () => {
     sizeEl.value = b.dataset.size;
     render();
