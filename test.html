@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<title>papergrid 字型比例測試</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .adj { border: 1px solid #ccc; padding: 8px; background: #fff; }
+  .adj h2 { font-size: 15px; margin: 0 0 6px; }
+  .adj .row { margin: 4px 0; }
+  .adj input[type=range] { flex: 1; }
+  .adj .row span { width: 4.5em; }
+  #snippet { width: 100%; height: 6.5em; font-family: monospace; font-size: 13px; }
+  .label { position: absolute; font-size: 5mm; color: #555; writing-mode: vertical-rl; }
+  .g.overlay { color: #e00; opacity: .6; }
+</style>
+</head>
+<body>
+<div id="controls">
+  <h1>字型比例測試</h1>
+  <p class="help" style="padding:0">同一批字用兩種字型並排；「重疊」列把標楷（紅）疊在加框字上，方便對齊。調整好後，把下方的設定貼回 <b>config.js</b> 的 FONT_ADJUST。</p>
+  <label>測試字 <input id="sample" style="width:100%; font-size:18px"></label>
+  <div class="row">
+    <label>國字大小 <input type="number" id="size" min="1" max="6" step="0.1"> cm</label>
+    <label><input type="checkbox" id="grid" checked> 格線</label>
+  </div>
+  <div id="adjusters"></div>
+  <textarea id="snippet" readonly></textarea>
+  <div id="status">字型載入中…</div>
+  <a href="index.html">← 回練習卷</a>
+</div>
+<div id="preview"><div id="pages"></div></div>
+
+<script src="config.js"></script>
+<script src="render.js"></script>
+<script src="test.js"></script>
+</body>
+</html>

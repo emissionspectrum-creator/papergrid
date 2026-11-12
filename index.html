@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<title>papergrid 國字練習卷</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="controls">
+  <h1>papergrid 國字練習卷</h1>
+  <textarea id="text" spellcheck="false"></textarea>
+  <ul class="help">
+    <li>Enter：另起一行；連按兩次：空一行</li>
+    <li>點預覽上的國字：切換「加框」</li>
+    <li>文字框裡的 <b>[字]</b> 就是加框字，可框多字：<b>[小狗]</b></li>
+  </ul>
+  <div class="row">
+    <label>國字大小 <input type="number" id="size" min="1" max="6" step="0.1"> cm</label>
+    <button type="button" data-size="2">2</button>
+    <button type="button" data-size="2.5">2.5</button>
+    <button type="button" data-size="3">3</button>
+  </div>
+  <div class="row">
+    <label>邊界 <input type="number" id="margin" min="0" max="5" step="0.1"> cm</label>
+  </div>
+  <div class="row">
+    換行方向
+    <label><input type="radio" name="dir" value="rtl" checked> 由右而左</label>
+    <label><input type="radio" name="dir" value="ltr"> 由左而右</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="grid" checked> 格線</label>
+  </div>
+  <div id="info"></div>
+  <div id="status">字型載入中…</div>
+  <div class="row">
+    <button type="button" id="print">列印 / 存成 PDF</button>
+    <a href="test.html" target="_blank">字型比例測試頁</a>
+  </div>
+</div>
+<div id="preview"><div id="pages"></div></div>
+
+<script src="config.js"></script>
+<script src="render.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
